@@ -8,4 +8,6 @@ WORKDIR /var/www/html
 
 COPY . /var/www/html/
 
+RUN echo "DirectoryIndex index.html index.php" > /etc/apache2/mods-enabled/dir.conf
+
 RUN chown -R www-data:www-data /var/www/html
