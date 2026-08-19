@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    
+    <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+    
+    <title>CosmetiStock</title>
+    
+    <meta
+    name="theme-color"
+    content="#4F6D7A">
+    
+    <meta
+    name="description"
+    content="Sistema profesional de inventario y ventas">
+    
+    <link
+    rel="manifest"
+    href="manifest.json">
+    
+    <link
+    rel="stylesheet"
+    href="css/style.css">
+    
+    </head>
+
+<body>
+
+<header class="header">
+
+    <div>
+
+        <h1>CosmetiStock</h1>
+
+        <p>Sistema Profesional de Inventario y Ventas</p>
+
+    </div>
+
+</header>
+
+<button id="btnMenuHamburguesa" class="btnMenuHamburguesa">
+    ☰
+</button>
+
+<main class="layout">
+
+<!--================== MENU ==================-->
+
+<aside class="sidebar">
+
+<button class="menu-btn activo" data-page="inicio">
+🏠 Inicio
+</button>
+
+<button class="menu-btn" data-page="inventario">
+📦 Inventario
+</button>
+
+<button class="menu-btn" data-page="clientes">
+👥 Clientes
+</button>
+
+<button class="menu-btn" data-page="ventas">
+🛒 Ventas
+</button>
+
+<button class="menu-btn" data-page="cobros">
+💵 Cobros
+</button>
+
+<button class="menu-btn" data-page="estadisticas">
+📊 Estadísticas
+</button>
+
+<button class="menu-btn" data-page="configuracion">
+⚙ Configuración
+</button>
+
+</aside>
+
+<!--================== CONTENIDO ==================-->
+
+<section class="contenido">
+
+    <!--================== INICIO ==================-->
+
+    <section class="page activa" id="inicio">
+    
+        <div class="tituloPagina">
+    
+            <div>
+    
+                <h2>Pagina Principal</h2>
+    
+                <p class="subtituloPagina">
+                    Resumen general de tu inventario y ventas.
+                </p>
+    
+            </div>
+    
+        </div>
+    
+        <!--======================================
+                RESUMEN GENERAL
+        =======================================-->
+    
+        <div class="dashboard">
+    
+            <div class="card">
+    
+                <h2>Productos registrados</h2>
+    
+                <span id="totalProductos">
+                    0
+                </span>
+    
+            </div>
+    
+            <div class="card">
+    
+                <h2>Unidades en inventario</h2>
+    
+                <span id="totalStock">
+                    0
+                </span>
+    
+            </div>
+    
+            <div class="card">
+    
+                <h2>Productos con stock bajo</h2>
+    
+                <span id="stockBajo">
+                    0
+                </span>
+    
+            </div>
+    
+            <div class="card">
+    
+                <h2>Categorías registradas</h2>
+    
+                <span id="totalCategorias">
+                    0
+                </span>
+    
+            </div>
+    
+        </div>
+    
+        <!--======================================
+                ALERTAS DEL SISTEMA
+        =======================================-->
+    
+        <section class="alertas">
+    
+            <h2>Alertas del Sistema</h2>
+    
+            <div id="listaAlertas"></div>
+    
+        </section>
+    
+        <!--======================================
+                ACTIVIDAD RECIENTE
+        =======================================-->
+    
+        <section class="historial">
+    
+            <h2>Actividad reciente</h2>
+    
+            <div id="historialActividad"></div>
+    
+        </section>
+    
+    </section>
+
+<!--================== INVENTARIO ==================-->
+
+<section class="page" id="inventario">
+
+<div class="tituloPagina">
+
+<h2>Inventario</h2>
+
+<button id="btnNuevo">
+
+Nuevo Producto
+
+</button>
+
+</div>
+
+<div class="filtros">
+
+<input
+type="text"
+id="buscar"
+placeholder="Buscar producto...">
+
+<select id="filtroCategoria">
+
+<option value="">Todas las categorías</option>
+
+<option>Cosméticos</option>
+
+<option>Maquillaje</option>
+
+<option>Cuidado Facial</option>
+
+<option>Cuidado Corporal</option>
+
+<option>Cabello</option>
+
+<option>Perfumería</option>
+
+<option>Manualidades</option>
+
+<option>Papelería</option>
+
+<option>Accesorios</option>
+
+<option>Otros</option>
+
+</select>
+
+<select id="ordenProductos">
+
+    <option value="az">A-Z</option>
+    
+    <option value="za">Z-A</option>
+    
+    <option value="stockMayor">Mayor Stock</option>
+    
+    <option value="stockMenor">Menor Stock</option>
+    
+    <option value="precioMayor">Mayor Precio</option>
+    
+    <option value="precioMenor">Menor Precio</option>
+    
+    <option value="gananciaMayor">Mayor Ganancia</option>
+    
+    <option value="gananciaMenor">Menor Ganancia</option>
+    
+    <option value="vendidos">Más Vendidos</option>
+    
+</select>
+
+</div>
+<div class="resumenInventario">
+
+    <div class="resumen-card">
+
+        <small>Valor Inventario</small>
+
+        <strong id="resInventario">
+
+            $0
+
+        </strong>
+
+    </div>
+
+    <div class="resumen-card">
+
+        <small>Ganancia Potencial</small>
+
+        <strong id="resUtilidad">
+
+            $0
+
+        </strong>
+
+    </div>
+
+</div>
+
+
+
+<div id="listaProductos"></div>
+
+</section>
+
+<!--================== CLIENTES ==================-->
+
+<section class="page" id="clientes">
+
+    <div class="tituloPagina">
+
+        <div>
+
+            <h2>Clientes</h2>
+
+        </div>
+
+        <button onclick="abrirModalCliente()">
+
+            Nuevo Cliente
+
+        </button>
+
+    </div>
+
+    <div class="resumenClientes">
+
+        <div class="card">
+
+            <small>Total Clientes</small>
+
+            <strong id="totalClientes">0</strong>
+
+        </div>
+
+        <div class="card">
+
+            <small>Clientes Activos</small>
+
+            <strong id="clientesActivos">0</strong>
+
+        </div>
+
+    </div>
+
+    <div class="filtrosClientes">
+
+        <input
+            type="text"
+            id="buscarCliente"
+            placeholder="Buscar cliente...">
+
+    </div>
+
+    <div id="listaClientes"></div>
+
+</section>
+
+<!--================== VENTAS ==================-->
+
+<section class="page" id="ventas">
+
+    <div class="tituloPagina">
+
+        <div>
+
+            <h2>Ventas</h2>
+
+            <p class="subtituloPagina">
+
+                Registra una nueva venta.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="ventasGrid">
+
+        <!--======================================
+                PRODUCTOS
+        =======================================-->
+
+        <div class="card">
+
+            <h3>Productos</h3>
+
+            <input
+                type="text"
+                id="buscarVenta"
+                placeholder="Buscar producto...">
+
+            <div id="listaProductosVenta">
+
+            </div>
+
+        </div>
+
+        <!--======================================
+                CARRITO
+        =======================================-->
+
+        <div class="card">
+
+            <h3>Carrito de Compra</h3>
+
+            <div id="carrito">
+
+                <p class="vacio">
+
+                    No hay productos agregados.
+
+                </p>
+
+            </div>
+
+            <hr>
+
+            <h3>Cliente</h3>
+
+            <select id="clienteVenta">
+
+                <option value="">
+
+                    Cliente ocasional
+
+                </option>
+
+            </select>
+
+            <button
+                class="btnSecundario"
+                onclick="cambiarPagina('clientes')">
+
+                👤 Administrar clientes
+
+            </button>
+
+            <hr>
+
+            <h3>Forma de pago</h3>
+
+            <select id="metodoPago">
+
+                <option value="contado">
+
+                    Contado
+
+                </option>
+
+                <option value="abono">
+
+                    Abono
+
+                </option>
+
+                <option value="credito">
+
+                    Crédito
+
+                </option>
+
+            </select>
+
+            <div id="camposPago">
+
+            </div>
+
+            <hr>
+
+            <div class="resumenVenta">
+
+                <div>
+
+                    <small>Subtotal</small>
+
+                    <strong id="subtotalVenta">
+
+                        $0
+
+                    </strong>
+
+                </div>
+
+                <div class="descuentoCampo">
+
+                    <small>Descuento</small>
+                
+                    <input
+                        type="text"
+                        inputmode="numeric"
+                        min="0"
+                        id="descuentoVenta"
+                        value="0"
+                        placeholder="0">
+                        
+                </div>
+
+                <div>
+
+                    <small>Total</small>
+
+                    <strong id="totalVenta">
+
+                        $0
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <button
+                id="confirmarVenta"
+                class="btnConfirmarVenta">
+
+                Confirmar Venta
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--================== COBROS ==================-->
+
+<section class="page" id="cobros">
+
+    <!--======================================
+        CUENTAS POR COBRAR
+    =======================================-->
+
+    <section class="cuentasCobrar">
+
+    <div class="tituloSeccion">
+
+        <div>
+
+            <h2>Cuentas por cobrar</h2>
+
+            <p class="subtituloPagina">
+                Consulta los clientes con pagos pendientes.
+            </p>
+
+        </div>
+
+        <div class="resumenCobros">
+
+            <strong id="totalPorCobrar">
+                $0
+            </strong>
+
+            <small>
+                Total pendiente
+            </small>
+
+        </div>
+
+    </div>
+
+    <div id="listaCuentasCobrar">
+
+        <p class="vacio">
+            No hay cuentas pendientes por cobrar.
+        </p>
+
+    </div>
+
+    </section>
+
+</section>
+
+<!-- ESTADISTICAS -->
+
+<div id="estadisticas" class="page">
+
+    <div class="tituloPagina">
+
+        <div>
+    
+            <h2>Estadísticas</h2>
+    
+            <p class="subtituloPagina">
+                Analiza el rendimiento de tus ventas e inventario.
+            </p>
+    
+        </div>
+    
+    </div>
+    
+    <!--======================================
+            RESUMEN DE VENTAS
+    =======================================-->
+    
+    <div class="resumenEstadisticas">
+    
+        <div class="card">
+    
+            <small>Ventas Realizadas</small>
+    
+            <strong id="estadisticasVentas">
+                0
+            </strong>
+    
+        </div>
+    
+        <div class="card">
+    
+            <small>Ingresos Totales</small>
+    
+            <strong id="estadisticasIngresos">
+                $0
+            </strong>
+    
+        </div>
+    
+        <div class="card">
+    
+            <small>Ganancia Total</small>
+    
+            <strong id="estadisticasGanancia">
+                $0
+            </strong>
+    
+        </div>
+    
+        <div class="card">
+    
+            <small>Unidades Vendidas</small>
+    
+            <strong id="unidadesVendidas">
+                0
+            </strong>
+    
+        </div>
+    
+    </div>
+    
+    <!--======================================
+            ESTADO DE PAGOS
+    =======================================-->
+    
+    <div class="card">
+    
+        <h3>Estado de Pagos</h3>
+    
+        <div class="estadisticasGrid">
+    
+            <div class="estadisticaDato">
+    
+                <small>Ventas de Contado</small>
+    
+                <strong id="ventasContado">
+                    0
+                </strong>
+    
+            </div>
+    
+            <div class="estadisticaDato">
+    
+                <small>Ventas con Abono</small>
+    
+                <strong id="ventasAbono">
+                    0
+                </strong>
+    
+            </div>
+    
+            <div class="estadisticaDato">
+    
+                <small>Ventas a Crédito</small>
+    
+                <strong id="ventasCredito">
+                    0
+                </strong>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    <!--======================================
+            TOP 5 PRODUCTOS
+    =======================================-->
+    
+    <div class="card estadisticaTop">
+
+        <div class="estadisticaTitulo">
+            <div>
+                <h3>Top 5 Productos Más Vendidos</h3>
+            </div>
+    
+        </div>
+    
+        <div id="topProductos">
+    
+            <p class="descripcionEstadistica">
+                No hay información disponible.
+            </p>
+    
+        </div>
+    
+    </div>
+
+    <!--======================================
+            RESUMEN POR CATEGORÍA
+    =======================================-->
+    
+    <div class="card">
+    
+        <h3>Resumen por Categoría</h3>
+    
+        <div id="tablaCategorias">
+    
+            <p class="descripcionEstadistica">
+                No hay productos registrados.
+            </p>
+    
+        </div>
+    
+    </div>
+
+</div>
+
+<!--================== CONFIGURACIÓN ==================-->
+
+<section class="page" id="configuracion">
+    
+        <div class="tituloPagina">
+    
+            <div>
+    
+                <h2>Configuración</h2>
+    
+                <p class="subtituloPagina">
+                    Administra los datos, preferencias y ayuda de CosmetiStock.
+                </p>
+    
+            </div>
+    
+        </div>
+    
+        <!--======================================
+                GESTIÓN DE DATOS
+        =======================================-->
+    
+        <section class="configuracionSeccion">
+    
+            <h3>Gestión de datos</h3>
+    
+            <p>
+                Realiza copias de seguridad o restaura la información
+                almacenada en CosmetiStock.
+            </p>
+    
+            <div class="configBotones">
+    
+                <button
+                    id="btnExportar"
+                    type="button"
+                >
+                    Exportar Base de Datos
+                </button>
+    
+                <button
+                    id="btnImportar"
+                    type="button"
+                >
+                    Importar Base de Datos
+                </button>
+    
+                <input
+                    type="file"
+                    id="archivoJSON"
+                    accept=".json,application/json"
+                    hidden
+                >
+    
+            </div>
+    
+        </section>
+    
+        <!--======================================
+                PREFERENCIAS
+        =======================================-->
+    
+        <section class="configuracionSeccion">
+    
+            <h3>Preferencias</h3>
+    
+            <p>
+                Personaliza la apariencia de la aplicación.
+            </p>
+    
+            <div class="dark-mode">
+    
+                <button
+                    id="btnModoOscuro"
+                    type="button"
+                >
+                    Modo Oscuro
+                </button>
+    
+            </div>
+    
+        </section>
+    
+        <!--======================================
+                MANTENIMIENTO
+        =======================================-->
+    
+        <section class="configuracionSeccion">
+    
+            <h3>Mantenimiento</h3>
+    
+            <p>
+                Elimina toda la información almacenada en el sistema.
+                Utiliza esta opción con precaución.
+            </p>
+    
+            <div class="configBotones">
+    
+                <button
+                    id="btnVaciar"
+                    type="button"
+                >
+                    Vaciar Base de Datos
+                </button>
+    
+            </div>
+    
+        </section>
+    
+        <!--======================================
+                SERVICIO AL CLIENTE
+        =======================================-->
+    
+        <section class="configuracionSeccion">
+    
+            <div class="tituloSeccion">
+    
+                <div>
+    
+                    <h3>Servicio al cliente y ayuda</h3>
+    
+                    <p>
+                        Consulta las preguntas frecuentes y aprende
+                        cómo utilizar las principales funciones de CosmetiStock.
+                    </p>
+    
+                </div>
+    
+                <div class="configBotones">
+    
+                    <button
+                        id="btnInfo"
+                        type="button"
+                    >
+                        Ver ayuda
+                    </button>
+    
+                </div>
+    
+            </div>
+    
+        </section>
+    
+        <!--======================================
+                PANEL DE INFORMACIÓN
+        =======================================-->
+    
+        <section
+        class="informacionSistema"
+        id="panelInformacion"
+        hidden
+    >
+
+        <div class="informacionEncabezado">
+
+            <div>
+
+                <h2>Centro de Ayuda</h2>
+
+                <p>
+                    Encuentra información sobre el funcionamiento
+                    de CosmetiStock y resuelve tus dudas.
+                </p>
+
+            </div>
+
+            <button
+                id="btnCerrarInfo"
+                class="btnCerrarInfo"
+            >
+                Cerrar
+            </button>
+
+        </div>
+
+        <!--======================================
+                PREGUNTAS FRECUENTES
+        =======================================-->
+
+        <div class="ayudaSeccion">
+
+            <h3>Preguntas frecuentes</h3>
+
+            <div class="preguntasFrecuentes">
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Cómo registro un producto?
+                    </strong>
+
+                    <p>
+                        Dirígete al apartado Productos y selecciona
+                        la opción para agregar un nuevo producto.
+                        Completa la información solicitada y guarda
+                        los datos.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Cómo puedo modificar un producto?
+                    </strong>
+
+                    <p>
+                        En el apartado Productos busca el producto
+                        que deseas modificar y utiliza el botón
+                        Editar para actualizar su información.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Cómo registro una venta?
+                    </strong>
+
+                    <p>
+                        Ingresa al apartado Ventas, selecciona los
+                        productos, indica el cliente y la forma de
+                        pago y finalmente confirma la venta.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Qué ocurre cuando una venta queda pendiente?
+                    </strong>
+
+                    <p>
+                        La venta queda registrada en Cuentas por
+                        Cobrar para que puedas consultar el saldo
+                        pendiente y registrar posteriormente los pagos
+                        realizados por el cliente.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Cómo puedo hacer una copia de seguridad?
+                    </strong>
+
+                    <p>
+                        Ve a Configuración y selecciona Exportar
+                        Base de Datos. El sistema generará un archivo
+                        JSON con la información almacenada.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Cómo puedo recuperar una copia de seguridad?
+                    </strong>
+
+                    <p>
+                        En Configuración selecciona Importar Base de
+                        Datos y elige el archivo JSON que anteriormente
+                        exportaste.
+                    </p>
+
+                </div>
+
+                <div class="pregunta">
+
+                    <strong>
+                        ¿Qué hace el modo oscuro?
+                    </strong>
+
+                    <p>
+                        Permite cambiar la apariencia de CosmetiStock
+                        para utilizar una interfaz oscura. La
+                        preferencia queda guardada para futuras visitas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--======================================
+                FUNCIONAMIENTO
+        =======================================-->
+
+        <div class="ayudaSeccion">
+
+            <h3>¿Cómo funciona CosmetiStock?</h3>
+
+            <div class="funcionamientoLista">
+
+                <div class="funcionamientoItem">
+
+                    <strong>📊 Dashboard</strong>
+
+                    <p>
+                        Muestra un resumen general del inventario,
+                        ventas, ganancias, alertas
+                        y actividad reciente.
+                    </p>
+
+                </div>
+
+                <div class="funcionamientoItem">
+
+                    <strong>📦 Productos</strong>
+
+                    <p>
+                        Permite registrar, consultar, editar y eliminar
+                        productos, además de controlar cantidades,
+                        precios y stock.
+                    </p>
+
+                </div>
+
+                <div class="funcionamientoItem">
+
+                    <strong>👥 Clientes</strong>
+
+                    <p>
+                        Permite administrar la información de los
+                        clientes registrados en el sistema.
+                    </p>
+
+                </div>
+
+                <div class="funcionamientoItem">
+
+                    <strong>💰 Ventas</strong>
+
+                    <p>
+                        Permite crear ventas, seleccionar productos,
+                        establecer métodos de pago y controlar los
+                        saldos pendientes.
+                    </p>
+
+                </div>
+
+                <div class="funcionamientoItem">
+
+                    <strong>📈 Estadísticas</strong>
+
+                    <p>
+                        Presenta información sobre el comportamiento
+                        del inventario, ventas, categorías y productos.
+                    </p>
+
+                </div>
+
+                <div class="funcionamientoItem">
+
+                    <strong>⚙️ Configuración</strong>
+
+                    <p>
+                        Permite realizar copias de seguridad, importar
+                        información, vaciar los datos y personalizar
+                        la apariencia del sistema.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--======================================
+                ATENCIÓN AL CLIENTE
+        =======================================-->
+
+        <div class="ayudaSeccion">
+
+            <div class="creadorInfo">
+
+                <h3>Atención al cliente</h3>
+
+                <p>
+                    Si tienes alguna duda, encuentras un problema
+                    o deseas realizar alguna sugerencia sobre
+                    CosmetiStock, puedes comunicarte con el creador
+                    del sistema.
+                </p>
+
+                <p>
+                    <strong>Creador:</strong>
+                    Duván Alejandro Rodríguez Cárdenas
+                </p>
+
+                <p>
+                    <strong>Correo:</strong>
+                    <a href="mailto:duvanrodri2007@gmail.com">duvanrodri2007@gmail.com</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<!--================== MODAL PRODUCTO ==================-->
+
+<div id="modal" class="modal oculto">
+
+<div class="modal-content">
+
+<h2 id="tituloModal">Nuevo Producto</h2>
+
+<h3>Información General</h3>
+
+<input
+id="codigo"
+placeholder="Código"
+readonly>
+
+<input
+id="nombre"
+placeholder="Nombre del producto">
+
+<div class="campoMarca">
+
+    <select id="marca">
+        <option value="">Seleccione una marca</option>
+    </select>
+    
+    <div id="nuevaMarcaContenedor" style="display:none;">
+        <input
+            id="nuevaMarca"
+            type="text"
+            placeholder="Escriba la nueva marca">
+    </div>
+    
+    <select id="categoria">
+        <option value="">Seleccione una categoría</option>
+    </select>
+    
+    <div id="nuevaCategoriaContenedor" style="display:none;">
+        <input
+            id="nuevaCategoria"
+            type="text"
+            placeholder="Escriba la nueva categoría">
+    </div>
+
+</div>
+
+<textarea
+id="descripcion"
+placeholder="Descripción"></textarea>
+
+<textarea
+id="especificaciones"
+placeholder="Especificaciones"></textarea>
+
+<div class="tituloSeccion">
+
+<h3>Inventario</h3>
+
+</div>
+
+<input
+id="cantidad"
+type="number"
+placeholder="Cantidad">
+
+<input
+id="stockMinimo"
+type="number"
+placeholder="Stock mínimo">
+
+<div class="tituloSeccion">
+
+<h3>Precios</h3>
+
+</div>
+
+<input
+id="costo"
+type="text"
+inputmode="numeric"
+placeholder="Costo">
+
+<input
+id="precio"
+type="text"
+inputmode="numeric"
+placeholder="Precio de venta">
+
+<input
+id="ganancia"
+type="text"
+readonly>
+
+<div class="tituloSeccion">
+
+<h3>Imagen</h3>
+
+</div>
+
+<input
+type="file"
+id="imagen"
+accept="image/*">
+
+<img
+id="previewImagen"
+src="">
+
+<div class="acciones">
+
+<button id="guardarProducto">
+
+Guardar
+
+</button>
+
+<button id="cancelar">
+
+Cancelar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+<!--================== MODAL CLIENTE ==================-->
+
+<div id="modalCliente" class="modal oculto">
+
+<div class="modal-content">
+
+<h2>Nuevo Cliente</h2>
+
+<input
+id="clienteNombre"
+placeholder="Nombre">
+
+<input
+id="clienteApellido"
+placeholder="Apellido">
+
+<input
+id="clienteTelefono"
+placeholder="Teléfono">
+
+<input
+id="clienteCorreo"
+type="email"
+placeholder="Correo">
+
+<textarea
+id="clienteDireccion"
+placeholder="Dirección"></textarea>
+
+<div class="acciones">
+
+<button id="guardarCliente">
+
+Guardar
+
+</button>
+
+<button id="cancelarCliente">
+
+Cancelar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!--================== MODAL FACTURA ==================-->
+
+<div id="modalFactura" class="modal oculto">
+
+    <div class="modal-content">
+
+        <h2>Factura</h2>
+
+        <div id="contenidoFactura"></div>
+
+    </div>
+
+</div>
+
+<!-- Aplicación -->
+
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/database.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/inventory.js"></script>
+<script src="js/sales.js"></script>
+<script src="js/cliente.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/history.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+    window.addEventListener("load",()=>{
+
+        navigator.serviceWorker.register("sw.js");
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
