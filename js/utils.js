@@ -25,7 +25,25 @@ function generarID(){
 */
 
 function obtenerFecha(){
-    return new Date().toLocaleString("es-CO", {
+
+    const ahora = new Date();
+
+    console.log("===== PRUEBA DE FECHA =====");
+    console.log("Date original:", ahora);
+    console.log("ISO:", ahora.toISOString());
+    console.log(
+        "Bogotá:",
+        ahora.toLocaleString("es-CO", {
+            timeZone: "America/Bogota"
+        })
+    );
+    console.log(
+        "Colombia:",
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
+    console.log("===========================");
+
+    return ahora.toLocaleString("es-CO", {
         timeZone: "America/Bogota"
     });
 }
