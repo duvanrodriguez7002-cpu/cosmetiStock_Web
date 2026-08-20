@@ -4,6 +4,32 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once "conexion.php";
 
+if (isset($_GET["prueba_hora"])) {
+
+    $resultadoHora = $conexion->query("
+        SELECT
+            CURRENT_TIMESTAMP AS hora_actual,
+            NOW() AS hora_now,
+            UTC_TIMESTAMP() AS hora_utc,
+            @@session.time_zone AS zona_mysql
+    ");
+
+    if (!$resultadoHora) {
+        responder(
+            false,
+            "No se pudo consultar la hora de MySQL."
+        );
+    }
+
+    $hora = $resultadoHora->fetch_assoc();
+
+    responder(
+        true,
+        "Prueba de hora",
+        $hora
+    );
+}
+
 $datos = json_decode(file_get_contents("php://input"), true);
 
 $accion = $datos["accion"] ?? $_POST["accion"] ?? $_GET["accion"] ?? "";
