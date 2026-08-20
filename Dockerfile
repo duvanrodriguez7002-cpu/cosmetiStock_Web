@@ -4,10 +4,11 @@ RUN docker-php-ext-install mysqli
 
 RUN a2enmod rewrite
 
+# Permitir que Apache/PHP pueda leer los Secret Files de Render
+RUN usermod -a -G 1000 www-data
+
 WORKDIR /var/www/html
 
 COPY . /var/www/html/
-
-RUN echo "DirectoryIndex index.html index.php" > /etc/apache2/mods-enabled/dir.conf
 
 RUN chown -R www-data:www-data /var/www/html
