@@ -272,15 +272,18 @@ function crearTarjetaProducto(producto){
     }
 
     const imagenValida =
-        producto.imagen &&
-        producto.imagen !== "" &&
-        !producto.imagen.includes("127.0.0.1:5500");
+    typeof producto.imagen === "string" &&
+    producto.imagen.trim() !== "";
 
     const imagen = imagenValida
         ?
         `
         <div class="producto-imagen">
-            <img src="${producto.imagen}" alt="${producto.nombre || "Producto"}">
+            <img
+                src="${producto.imagen}"
+                alt="${producto.nombre || "Producto"}"
+                loading="lazy"
+            >
         </div>
         `
         :
@@ -1141,7 +1144,9 @@ async function abrirEditarProducto(id){
             document.getElementById("previewImagen");
 
         if(
-            producto.imagen
+            preview &&
+            typeof producto.imagen === "string" &&
+            producto.imagen.trim() !== ""
         ){
 
             preview.src =
@@ -1150,7 +1155,7 @@ async function abrirEditarProducto(id){
             preview.style.display =
                 "block";
 
-        }else{
+        }else if(preview){
 
             preview.src =
                 "";

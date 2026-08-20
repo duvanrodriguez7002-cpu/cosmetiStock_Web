@@ -361,10 +361,11 @@ function obtenerCategoriaId($conexion, $categoriaId, $nuevaCategoria)
 /*
 =========================================
         GUARDAR IMAGEN DEL PRODUCTO
+        EN BASE DE DATOS
 =========================================
 */
 
-function guardarImagenProducto($imagen, $id)
+function guardarImagenProducto($imagen)
 {
     if (!$imagen) {
         return "";
@@ -377,72 +378,7 @@ function guardarImagenProducto($imagen, $id)
         return "";
     }
 
-    $imagen = preg_replace(
-        '/^data:image\/(webp|jpeg|jpg|png);base64,/',
-        '',
-        $imagen
-    );
-
-    $imagen = str_replace(' ', '+', $imagen);
-
-    $contenido = base64_decode($imagen);
-
-    if ($contenido === false) {
-        return "";
-    }
-
-    $carpeta = dirname(__DIR__) . "/uploads/productos/";
-
-    if (!is_dir($carpeta)) {
-        mkdir($carpeta, 0777, true);
-    }
-
-    $nombreArchivo =
-        "producto_" .
-        intval($id) .
-        "_" .
-        time() .
-        ".webp";
-
-    $rutaFisica =
-        $carpeta .
-        $nombreArchivo;
-
-    if (!file_put_contents(
-        $rutaFisica,
-        $contenido
-    )) {
-        return "";
-    }
-
-    return "uploads/productos/" . $nombreArchivo;
-}
-
-/*
-=========================================
-        ELIMINAR IMAGEN
-=========================================
-*/
-
-function eliminarImagenProducto($ruta)
-{
-    if (!$ruta) {
-        return;
-    }
-
-    if (
-        strpos($ruta, "uploads/productos/") !== 0 ||
-        strpos($ruta, "data:image") === 0
-    ) {
-        return;
-    }
-
-    $rutaFisica =
-        dirname(__DIR__) . "/" . $ruta;
-
-    if (file_exists($rutaFisica)) {
-        unlink($rutaFisica);
-    }
+    return $imagen;
 }
 
 /*
@@ -478,10 +414,17 @@ function obtenerImagenesProducto($conexion, $productoId)
     while ($imagen = $resultado->fetch_assoc()) {
 
         $imagenes[] = [
-            "id" => (int)$imagen["id"],
-            "url_ruta" => $imagen["url_ruta"],
-            "tipo" => $imagen["tipo"],
-            "fecha_carga" => $imagen["fecha_carga"]
+            "id" =>
+                (int)$imagen["id"],
+
+            "url_ruta" =>
+                $imagen["url_ruta"],
+
+            "tipo" =>
+                $imagen["tipo"],
+
+            "fecha_carga" =>
+                $imagen["fecha_carga"]
         ];
     }
 
@@ -489,7 +432,6 @@ function obtenerImagenesProducto($conexion, $productoId)
 
     return $imagenes;
 }
-
 /*
 =========================================
         LISTAR PRODUCTOS
@@ -969,13 +911,12 @@ if ($accion === "crear") {
 
         if (!empty($imagen)) {
 
-            $rutaImagen =
-                guardarImagenProducto(
-                    $imagen,
-                    $idProducto
-                );
+                $imagenBase64 =
+                    guardarImagenProducto(
+                        $imagen
+                    );
 
-            if ($rutaImagen !== "") {
+            if ($imagenBase64 !== "") {
 
                 $stmtImagen =
                     $conexion->prepare("
@@ -998,7 +939,7 @@ if ($accion === "crear") {
                     $stmtImagen->bind_param(
                         "is",
                         $idProducto,
-                        $rutaImagen
+                        $imagenBase64
                     );
 
                     $stmtImagen->execute();
@@ -1210,13 +1151,12 @@ if ($accion === "editar") {
         strpos($imagen, "data:image/") === 0
     ) {
 
-        $rutaNueva =
+        $imagenBase64 =
             guardarImagenProducto(
-                $imagen,
-                $id
-            );
+                $imagen
+        );
 
-        if ($rutaNueva === "") {
+        if ($imagenBase64 === "") {
             responder(
                 false,
                 "No se pudo guardar la nueva imagen."
@@ -1249,7 +1189,7 @@ if ($accion === "editar") {
         $stmtImagen->bind_param(
             "is",
             $id,
-            $rutaNueva
+            $imagenBase64
         );
 
         if (!$stmtImagen->execute()) {
