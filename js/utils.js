@@ -25,13 +25,9 @@ function generarID(){
 */
 
 function obtenerFecha(){
-
-    return new Date().toLocaleString(
-
-        "es-CO"
-
-    );
-
+    return new Date().toLocaleString("es-CO", {
+        timeZone: "America/Bogota"
+    });
 }
 
 /*======================================*
