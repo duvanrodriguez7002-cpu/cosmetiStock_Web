@@ -4,9 +4,12 @@ RUN docker-php-ext-install mysqli
 
 RUN a2enmod rewrite
 
-# Crear el grupo utilizado por los Secret Files de Render
 RUN groupadd -g 1000 rendergroup && \
     usermod -a -G rendergroup www-data
+
+ENV TZ=America/Bogota
+
+RUN echo "date.timezone=America/Bogota" > /usr/local/etc/php/conf.d/timezone.ini
 
 WORKDIR /var/www/html
 
