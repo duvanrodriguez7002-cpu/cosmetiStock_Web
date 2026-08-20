@@ -40,3 +40,33 @@ $conexion->set_charset("utf8mb4");
 
 /* Zona horaria de Colombia */
 $conexion->query("SET time_zone = '-05:00'");
+
+/*
+=========================================
+        PRUEBA DE HORA MYSQL
+=========================================
+*/
+
+$pruebaHora = $conexion->query("
+    SELECT
+        CURRENT_TIMESTAMP AS current_timestamp,
+        NOW() AS now_mysql,
+        UTC_TIMESTAMP() AS utc_mysql,
+        @@session.time_zone AS zona_mysql
+");
+
+if ($pruebaHora) {
+
+    $hora = $pruebaHora->fetch_assoc();
+
+    error_log(
+        "MYSQL -> CURRENT_TIMESTAMP: " .
+        $hora["current_timestamp"] .
+        " | NOW: " .
+        $hora["now_mysql"] .
+        " | UTC: " .
+        $hora["utc_mysql"] .
+        " | ZONA: " .
+        $hora["zona_mysql"]
+    );
+}
