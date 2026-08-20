@@ -4,8 +4,9 @@ RUN docker-php-ext-install mysqli
 
 RUN a2enmod rewrite
 
-# Permitir que Apache/PHP pueda leer los Secret Files de Render
-RUN usermod -a -G 1000 www-data
+# Crear el grupo utilizado por los Secret Files de Render
+RUN groupadd -g 1000 rendergroup && \
+    usermod -a -G rendergroup www-data
 
 WORKDIR /var/www/html
 
