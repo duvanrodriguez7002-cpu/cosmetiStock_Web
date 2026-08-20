@@ -6,7 +6,14 @@ $usuario = getenv("DB_USER");
 $password = getenv("DB_PASSWORD");
 $baseDatos = getenv("DB_NAME");
 $puerto = getenv("DB_PORT");
+
 $ssl_ca = getenv("DB_SSL_CA");
+
+var_dump($ssl_ca);
+var_dump(file_exists($ssl_ca));
+var_dump(is_readable($ssl_ca));
+
+exit;
 
 /* Inicializa MySQLi */
 $conexion = mysqli_init();
