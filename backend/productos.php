@@ -1067,7 +1067,12 @@ if ($accion === "editar") {
         );
     }
 
-    if ($precio < 0 || $costo < 0 || $cantidad < 0 || $stockMinimo < 0) {
+    if (
+        $precio < 0 ||
+        $costo < 0 ||
+        $cantidad < 0 ||
+        $stockMinimo < 0
+    ) {
         responder(
             false,
             "Los valores numéricos no pueden ser negativos."
@@ -1081,6 +1086,12 @@ if ($accion === "editar") {
     if ($categoriaId <= 0) {
         $categoriaId = null;
     }
+
+    /*
+    =========================================
+        ACTUALIZAR PRODUCTO
+    =========================================
+    */
 
     $stmt =
         $conexion->prepare("
@@ -1125,6 +1136,8 @@ if ($accion === "editar") {
     if (!$stmt->execute()) {
 
         if ($stmt->errno === 1062) {
+            $stmt->close();
+
             responder(
                 false,
                 "El código del producto ya existe."
@@ -1132,11 +1145,15 @@ if ($accion === "editar") {
         }
 
         if ($stmt->errno === 1452) {
+            $stmt->close();
+
             responder(
                 false,
                 "La marca o categoría seleccionada no existe."
             );
         }
+
+        $stmt->close();
 
         responder(
             false,
@@ -1146,6 +1163,19 @@ if ($accion === "editar") {
 
     $stmt->close();
 
+    /*
+    =========================================
+        ACTUALIZAR IMAGEN
+    =========================================
+
+        Si se recibió una nueva imagen:
+
+        1. Se eliminan las imágenes anteriores
+           asociadas al producto.
+        2. Se guarda la nueva imagen.
+        3. El producto queda con una sola imagen.
+    */
+
     if (
         !empty($imagen) &&
         strpos($imagen, "data:image/") === 0
@@ -1154,7 +1184,7 @@ if ($accion === "editar") {
         $imagenBase64 =
             guardarImagenProducto(
                 $imagen
-        );
+            );
 
         if ($imagenBase64 === "") {
             responder(
@@ -1162,6 +1192,48 @@ if ($accion === "editar") {
                 "No se pudo guardar la nueva imagen."
             );
         }
+
+        /*
+        -----------------------------------------
+            Eliminar imágenes anteriores
+        -----------------------------------------
+        */
+
+        $stmtEliminarImagenes =
+            $conexion->prepare("
+                DELETE FROM imagenes
+                WHERE producto_id = ?
+            ");
+
+        if (!$stmtEliminarImagenes) {
+            responder(
+                false,
+                "No se pudieron eliminar las imágenes anteriores."
+            );
+        }
+
+        $stmtEliminarImagenes->bind_param(
+            "i",
+            $id
+        );
+
+        if (!$stmtEliminarImagenes->execute()) {
+
+            $stmtEliminarImagenes->close();
+
+            responder(
+                false,
+                "No se pudieron eliminar las imágenes anteriores."
+            );
+        }
+
+        $stmtEliminarImagenes->close();
+
+        /*
+        -----------------------------------------
+            Guardar nueva imagen
+        -----------------------------------------
+        */
 
         $stmtImagen =
             $conexion->prepare("
@@ -1193,6 +1265,9 @@ if ($accion === "editar") {
         );
 
         if (!$stmtImagen->execute()) {
+
+            $stmtImagen->close();
+
             responder(
                 false,
                 "No se pudo registrar la nueva imagen."
