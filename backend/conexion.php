@@ -37,3 +37,6 @@ if (!$conexion->real_connect(
 
 /* UTF-8 */
 $conexion->set_charset("utf8mb4");
+
+/* Zona horaria de Colombia */
+$conexion->query("SET time_zone = '-05:00'");
