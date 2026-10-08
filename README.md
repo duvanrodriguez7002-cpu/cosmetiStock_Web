@@ -1,4 +1,4 @@
-# CosmetiStock
+# CosmetiStock WEB
 
 Sistema profesional de inventario y ventas.
 
